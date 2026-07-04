@@ -1,0 +1,56 @@
+---
+title: "Rebuilding this website from scratch"
+description: "Why v1 had to go, and how v2 is built — Next.js 16, an interactive terminal, SSO guestbook, and a Vim statusline for a footer."
+date: "2026-07-03"
+tags: ["meta", "nextjs", "typescript"]
+---
+
+The first version of this site did its job: it existed. It had a blog, a kbar
+palette, and a GitHub stats card. It also had no sitemap, no OG images, a
+484 KB PNG as a card background, and a body font that was whatever your
+browser felt like that day. Time for a rewrite.
+
+## What v2 is
+
+This site is a **Next.js 16** app with React Server Components doing almost
+all the work. Client JavaScript is reserved for the things that are actually
+interactive:
+
+- the **terminal** on the homepage (`help`, `whoami`, `neofetch` — go poke it)
+- the **⌘K command palette**, plus vim keys — `j`/`k` scroll, `gg`/`G` jump
+- the **statusline footer** — mode, current file, and your scroll position as
+  a line percentage, exactly like the editor I live in
+- the social layer: **guestbook, comments, and emoji reactions**, signed in
+  via GitHub or Google SSO (Auth.js v5, JWT sessions, Drizzle + Postgres)
+
+Everything else — blog rendering, project data, the GitHub contribution
+heatmap — is server-rendered HTML with ISR, which is why the pages load the
+way they do.
+
+## Decisions I'd defend in a code review
+
+**Opacity over color.** The dark theme is one near-black background with text
+at three opacity tiers and a single green accent. If everything is colorful,
+nothing is.
+
+**MDX on the filesystem.** No CMS. Posts are `.mdx` files with
+zod-validated frontmatter, highlighted by shiki at build time. A blog that
+requires a database to render text is a blog that will eventually not render
+text.
+
+**Feature flags via environment.** The guestbook, comments, reactions, view
+counters, and the AI assistant all switch off gracefully when their env vars
+are missing. The site never breaks because a database is napping.
+
+**Live data, cached hard.** Stars, forks, and crates.io downloads are real
+and revalidate hourly. Broken widgets are worse than no widgets, so
+everything degrades to "hidden" rather than "spinner forever".
+
+## The stack, for the curious
+
+Next.js 16 · React 19 · TypeScript · Tailwind CSS 4 · motion ·
+next-mdx-remote + shiki · Auth.js v5 · Drizzle ORM + Neon Postgres ·
+Vercel AI SDK · deployed on Vercel. Source is linked in the footer —
+it's open, like everything else I build.
+
+If you find a bug, the guestbook doubles as an issue tracker with worse SLAs.

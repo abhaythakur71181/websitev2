@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# website-v2
 
-## Getting Started
+Personal website of **Abhay Thakur** ([@abhaythakur71181](https://github.com/abhaythakur71181)) —
+Senior Software Developer at Salescode.ai, Rust open-sourcerer, NixOS user.
 
-First, run the development server:
+A dark-first, terminal-flavored portfolio: interactive shell on the homepage,
+⌘K command palette, vim keybindings, a statusline for a footer, SSO-powered
+guestbook/comments/reactions, live GitHub + crates.io stats, an MDX blog, and
+an AI assistant grounded in the site's own data.
+
+Full product/design/engineering rationale lives in [`docs/PLAN.md`](docs/PLAN.md).
+
+## Stack
+
+Next.js 16 (App Router, RSC, ISR) · React 19 · TypeScript · Tailwind CSS 4 ·
+motion · next-mdx-remote + shiki · Auth.js v5 (GitHub + Google SSO) ·
+Drizzle ORM + Neon Postgres · Vercel AI SDK · cmdk · lucide-react
+
+## Local development
 
 ```bash
+npm install
+cp .env.example .env.local   # everything in it is optional
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The site is fully functional with **zero** environment variables — social
+features (guestbook, comments, reactions, views), the AI assistant, and
+analytics each enable themselves only when their env vars exist. See
+[`.env.example`](.env.example) for the full menu.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Enabling the social layer (SSO + database)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Create a free [Neon](https://neon.tech) Postgres database, set `DATABASE_URL`.
+2. Push the schema: `npx drizzle-kit push`
+3. Set `AUTH_SECRET` (`npx auth secret`) and create OAuth apps:
+   - GitHub: callback `https://<your-domain>/api/auth/callback/github`
+   - Google: callback `https://<your-domain>/api/auth/callback/google`
 
-## Learn More
+### Content
 
-To learn more about Next.js, take a look at the following resources:
+Blog posts are MDX files in `content/blog/` with zod-validated frontmatter:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```yaml
+---
+title: "Post title"
+description: "One-sentence hook."
+date: "2026-07-03"
+tags: ["rust", "backend"]
+draft: false # optional
+---
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Projects, experience, skills, timeline, and uses data live in `lib/data/` —
+edit those files to update the About/Projects/Resume pages.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Built for Vercel: push, import, set env vars, done. GitHub/crates.io stats
+revalidate hourly; blog pages are fully static; OG images are generated at
+the edge per page.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Keyboard
+
+- `⌘K` / `Ctrl+K` — command palette
+- `j` / `k` — scroll, `gg` / `G` — top/bottom
+- ↑↑↓↓←→←→BA — you know what to do
