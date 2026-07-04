@@ -52,6 +52,14 @@ export const uses: UsesGroup[] = [
     label: "Hardware",
     items: [
       {
+        name: "Mac M4",
+        note: "For office work.",
+      },
+      {
+        name: "Custom PC build",
+        note: "Ryzen 5 3600, RTX 2060, 16GB RAM for gaming and stuff.",
+      },
+      {
         name: "ASUS TUF Gaming laptop",
         note: "Fan curves controlled by perfmode — my own Rust CLI, because the vendor tool doesn't run on Linux.",
         url: "https://github.com/abhaythakur71181/perfmode",
