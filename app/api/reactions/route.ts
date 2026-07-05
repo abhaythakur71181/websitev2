@@ -4,8 +4,7 @@ import { z } from "zod";
 import { auth } from "@/auth";
 import { getDb } from "@/db";
 import { reactions } from "@/db/schema";
-
-export const ALLOWED_EMOJI = ["❤️", "🚀", "🔥", "👏", "🦀"] as const;
+import { ALL_EMOJI } from "@/lib/reactions";
 
 export async function GET(req: Request) {
   const target = new URL(req.url).searchParams.get("target");
@@ -38,7 +37,7 @@ export async function GET(req: Request) {
 
 const toggleSchema = z.object({
   target: z.string().trim().min(1).max(191),
-  emoji: z.enum(ALLOWED_EMOJI),
+  emoji: z.enum(ALL_EMOJI),
 });
 
 export async function POST(req: Request) {

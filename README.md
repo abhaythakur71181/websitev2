@@ -5,8 +5,9 @@ Senior Software Developer at Salescode.ai, Rust open-sourcerer, NixOS user.
 
 A dark-first, terminal-flavored portfolio: interactive shell on the homepage,
 ⌘K command palette, vim keybindings, a statusline for a footer, SSO-powered
-guestbook/comments/reactions, live GitHub + crates.io stats, an MDX blog, and
-an AI assistant grounded in the site's own data.
+guestbook + threaded comments (nested replies, per-comment emoji reactions),
+live GitHub + crates.io stats, an MDX blog, and an AI assistant grounded in
+the site's own data.
 
 Full product/design/engineering rationale lives in [`docs/PLAN.md`](docs/PLAN.md).
 
