@@ -155,8 +155,11 @@ Redis (nothing here needs it), analytics SDKs (GoatCounter is a script tag).
 ## 8. Database schema
 
 `guestbook_entries(id, body, author_id, author_name, author_image, created_at)`
-`comments(id, slug, body, author_id, author_name, author_image, created_at)`
+`comments(id, slug, parent_id→comments.id, body, author_id, author_name, author_image, created_at)`
 `reactions(id, target, emoji, author_id, created_at, unique(target,emoji,author))`
+Reaction targets: `blog:<slug>` for posts, `comment:<id>` for comments —
+one table and endpoint serve both surfaces. Comment threads nest via
+`parent_id` (NULL = top-level), rendered recursively with capped indent.
 `page_views(slug pk, count)`
 Identity snapshot pattern (no FK user table) because sessions are JWT.
 

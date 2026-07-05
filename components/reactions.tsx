@@ -3,8 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { cn } from "@/lib/utils";
-
-const EMOJI = ["❤️", "🚀", "🔥", "👏", "🦀"] as const;
+import { POST_EMOJI } from "@/lib/reactions";
 
 /**
  * Emoji reactions bar for a target ("blog:slug"). Anyone can see counts;
@@ -52,7 +51,7 @@ export function Reactions({ target }: { target: string }) {
   return (
     <div>
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Reactions">
-        {EMOJI.map((emoji) => {
+        {POST_EMOJI.map((emoji) => {
           const active = mine.includes(emoji);
           const count = counts[emoji] ?? 0;
           return (

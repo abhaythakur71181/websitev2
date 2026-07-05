@@ -7,6 +7,7 @@ import {
   timestamp,
   uniqueIndex,
   varchar,
+  type AnyPgColumn,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -26,19 +27,28 @@ export const guestbookEntries = pgTable(
   (t) => [index("guestbook_created_idx").on(t.createdAt)],
 );
 
-/** Comments attached to a blog post (by slug). */
+/**
+ * Comments attached to a blog post (by slug). Replies reference their parent
+ * comment via parent_id (NULL = top-level), enabling arbitrarily deep threads.
+ */
 export const comments = pgTable(
   "comments",
   {
     id: serial("id").primaryKey(),
     slug: varchar("slug", { length: 191 }).notNull(),
+    parentId: integer("parent_id").references((): AnyPgColumn => comments.id, {
+      onDelete: "cascade",
+    }),
     body: varchar("body", { length: 2000 }).notNull(),
     authorId: varchar("author_id", { length: 191 }).notNull(),
     authorName: varchar("author_name", { length: 191 }).notNull(),
     authorImage: text("author_image"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
-  (t) => [index("comments_slug_idx").on(t.slug)],
+  (t) => [
+    index("comments_slug_idx").on(t.slug),
+    index("comments_parent_idx").on(t.parentId),
+  ],
 );
 
 /**
